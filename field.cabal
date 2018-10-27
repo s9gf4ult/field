@@ -16,16 +16,8 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   ghc-options:         -Wall
-  exposed-modules:     Lib
+  exposed-modules:     Control.Monad.Field
   build-depends:       base >= 4.7 && < 5
-  default-language:    Haskell2010
-
-executable field-exe
-  hs-source-dirs:      app
-  main-is:             Main.hs
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , field
   default-language:    Haskell2010
 
 test-suite field-test
