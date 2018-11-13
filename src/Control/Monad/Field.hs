@@ -1,9 +1,14 @@
+{-# LANGUAGE AllowAmbiguousTypes #-}
+
 module Control.Monad.Field where
 
+import Control.Lens
 import Control.Monad.Base
 import Control.Monad.Reader.Class
 import Control.Monad.State.Class
 import Control.Monad.Trans.State.Strict (StateT(..))
+import Data.Generics.Product
+import Data.Tagged
 
 
 -- | Struct of field monad with applied argument
@@ -22,6 +27,12 @@ instance (Monad m) => MonadReader (FieldS s m) (FieldT s m) where
     state $ ((),) <$> f
     ma
   reader f = f <$> ask
+
+-- | Use it with TypeApplications
+taggedType :: forall t a ctx m
+  . (HasType (Tagged t a) (FieldS ctx m))
+  => Lens' (FieldS ctx m) a
+taggedType = (typed :: Lens' (FieldS ctx m) (Tagged t a)) . _Wrapped
 
 runFieldT :: FieldS s m -> FieldT s m a -> m (a, FieldS s m)
 runFieldT s (FieldT ma) = runStateT ma s
